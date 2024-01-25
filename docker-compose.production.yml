@@ -17,6 +17,8 @@ services:
     volumes:
       - static_volume:/backend_static
       - media:/media
+    depends_on:
+      - db
   frontend:
     image: xadr69/kittygram_frontend
     env_file: .env
@@ -32,3 +34,6 @@ services:
       - media:/media
     ports:
       - 9000:80
+    depends_on:
+      - backend
+      - frontend

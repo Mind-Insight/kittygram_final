@@ -46,6 +46,7 @@ jobs:
     name: Push Docker image to DockerHub
     runs-on: ubuntu-latest
     needs: tests
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -61,11 +62,10 @@ jobs:
         with:
           context: ./backend/
           push: true
-          tags: xadr69/kittygram_backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kittygram_backend:latest
 
   frontend_tests:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up nodeJS
@@ -87,6 +87,7 @@ jobs:
     name: Push frontend Docker image to DockerHub
     runs-on: ubuntu-latest
     needs: frontend_tests
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -102,11 +103,12 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: xadr69/kittygram_frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kittygram_frontend:latest
 
   build_gateway_and_push_to_docker_hub:
     name: Push gateway Docker image to DockerHub
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -122,7 +124,7 @@ jobs:
         with:
           context: ./nginx/
           push: true
-          tags: xadr69/kittygram_gateway:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kittygram_gateway:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -130,6 +132,7 @@ jobs:
       - build_and_push_to_docker_hub
       - build_frontend_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
+    if: github.ref == 'refs/heads/main'
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
@@ -167,4 +170,7 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: Деплой успешно выполнен!
+        message: |
+          Деплой был успешно выполнен автором ${{ github.actor }}!
+          Сообщение коммита: ${{ github.event.commits[0].message }}.
+          Ссылка на коммит: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
