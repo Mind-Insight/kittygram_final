@@ -3,6 +3,7 @@ version: '2'
 volumes:
   pg_data_production:
   static_volume:
+  media:
 
 services:
   db:
@@ -15,16 +16,19 @@ services:
     env_file: .env
     volumes:
       - static_volume:/backend_static
+      - media:/media
   frontend:
     image: xadr69/kittygram_frontend
     env_file: .env
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static_volume:/frontend_static
+      - media:/media
   gateway:
     image: xadr69/kittygram_gateway
     env_file: .env
     volumes:
       - static_volume:/staticfiles/
+      - media:/media
     ports:
       - 9000:80

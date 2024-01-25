@@ -1,3 +1,5 @@
+![example workflow](https://github.com/Mind-Insight/kittygram_final/actions/workflows/main.yml/badge.svg)
+
 #  Как работать с репозиторием финального задания
 
 ## Что нужно сделать
