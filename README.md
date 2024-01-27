@@ -22,27 +22,35 @@
 git clone https://github.com/your/repository.git
 ```
 
-2. Установить зависимости:
-
+2. Создать и активировать виртуальное окружение
 ```
-pip install -r requirements.txt
-```
-
-3. Запустить проект:
-
-```
-python manage.py runserver
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-## Настройка переменных окружения
-
-1. Создайте файл `.env` в корневой папке проекта.
-2. Заполните переменные окружения в файле `.env` следующим образом:
+3. Установить зависимости:
 
 ```
-VARIABLE1=value1
-VARIABLE2=value2
+pip install -r backend/requirements.txt
 ```
+
+4. В корне проекта создать .env
+```
+nano .env
+```
+и заполнить его содержимым .env.example
+
+5. Запустите проект локально
+```
+sudo docker compose up
+```
+
+6. Выполните миграции следующей командой
+```
+sudo docker exec kittygram_final_backend_1 python manage.py migrate
+```
+
+7. Перейдите по ссылке http://0.0.0.0:9000
 
 ## Автор
 
